@@ -41,9 +41,22 @@ The Model custom resource defines a machine learning model deployment in Plastik
 
 | Property | Type | Description |
 | -------- | ---- | ----------- |
-| `type` | string | Download type (huggingface-dl \| wget) |
+| `type` | string | Download type (huggingface-dl \| http \| s3) |
 | `source` | string | Download source URL / huggingface repo/filename |
+| `job` | object | Configuration for the download job |
 | `auth` | object | Authentication for the download |
+
+### job Object
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `image` | string | Container image to use for downloading the model |
+| `imagePullSecret` | string | Secret to use for pulling the downloader image |
+| `entrypoint` | []string | Override the image entrypoint for the downloader |
+| `args` | []string | Override the image args for the downloader |
+| `env` | []object | Extra environment variables to set in the downloader container |
+| `envFrom` | []object | Extra environment variables from sources to set in the downloader container |
+| `securityContext` | object | Security settings for the downloader pod |
 
 ### auth Object
 
@@ -99,6 +112,33 @@ spec:
     busyScaleUp:
       bucket: 60
       activePercent: 70
+```
+
+### Model with Custom Download Job
+
+```yaml
+apiVersion: plastikube.dev/v1
+kind: Model
+metadata:
+  name: custom-download-model
+spec:
+  image: my-model:latest
+  engine: llamacpp
+  resourceProfile: my-resource-profile
+  modelStorage:
+    download:
+      type: http
+      source: https://example.com/model.bin
+      job:
+        image: curlimages/curl:latest
+        args:
+        - "-L"
+        - "https://example.com/model.bin"
+        - "-o"
+        - "/model/model.bin"
+        env:
+        - name: CUSTOM_VAR
+          value: "value"
 ```
 
 ### Model with Existing PVC

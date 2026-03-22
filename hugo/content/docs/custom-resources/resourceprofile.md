@@ -25,6 +25,7 @@ Common resource names:
 - `memory` - Memory in bytes
 - `nvidia.com/gpu` - NVIDIA GPUs via gpu-operator
 - `hostdev.k8s.io/dev_kfd` - AMD GPUs via [k8s-hostdev-plugin](https://github.com/thehonker/k8s-hostdev-plugin)
+- `amd.com/gpu` - AMD GPUs via official AMD GPU operator
 
 ## Example
 
@@ -40,8 +41,8 @@ spec:
     cpu: "1"
     memory: "2Gi"
 
-# nvidia gpu using nvidia-gpu-operator
 ---
+# nvidia gpu using nvidia-gpu-operator
 apiVersion: plastikube.dev/v1
 kind: ResourceProfile
 metadata:
@@ -63,4 +64,16 @@ spec:
     cpu: "4"
     memory: "16Gi"
     hostdev.k8s.io/dev_kfd: 1
+
+---
+# amd gpu using official amd gpu operator
+apiVersion: plastikube.dev/v1
+kind: ResourceProfile
+metadata:
+  name: amd-gpu-official
+spec:
+  resources:
+    cpu: "4"
+    memory: "16Gi"
+    amd.com/gpu: "1"
 ```
