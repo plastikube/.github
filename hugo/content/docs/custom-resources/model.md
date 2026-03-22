@@ -22,7 +22,6 @@ The Model custom resource defines a machine learning model deployment in Plastik
 | `entrypoint` | []string | Override the image entrypoint |
 | `args` | []string | Override the image args |
 | `env` | []object | Extra environment variables to set in the container |
-| `envFrom` | []object | Extra environment variables from sources |
 | `replicas` | integer | Default number of replicas |
 | `autoscaling` | object | Autoscaling configuration |
 | `nodeSelector` | object | Node labels for pod assignment |
@@ -44,7 +43,6 @@ The Model custom resource defines a machine learning model deployment in Plastik
 | `type` | string | Download type (huggingface-dl \| http \| s3) |
 | `source` | string | Download source URL / huggingface repo/filename |
 | `job` | object | Configuration for the download job |
-| `auth` | object | Authentication for the download |
 
 ### job Object
 
@@ -55,14 +53,7 @@ The Model custom resource defines a machine learning model deployment in Plastik
 | `entrypoint` | []string | Override the image entrypoint for the downloader |
 | `args` | []string | Override the image args for the downloader |
 | `env` | []object | Extra environment variables to set in the downloader container |
-| `envFrom` | []object | Extra environment variables from sources to set in the downloader container |
 | `securityContext` | object | Security settings for the downloader pod |
-
-### auth Object
-
-| Property | Type | Description |
-| -------- | ---- | ----------- |
-| `secretKeyRef` | object | Secret key for HUGGINGFACE_TOKEN or HTTP basic auth |
 
 ### autoscaling Object
 
@@ -101,10 +92,13 @@ spec:
     download:
       type: huggingface-dl
       source: my-repo/my-model
-      auth:
-        secretKeyRef:
-          name: huggingface-token
-          key: token
+      job:
+        env:
+        - name: HUGGINGFACE_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: huggingface-secret
+              key: token
   autoscaling:
     minReplicas: 0
     maxReplicas: 1
