@@ -1,6 +1,6 @@
 ---
 weight: 10
-title: "Model"
+title: "plastikube.dev/v1/Model"
 description: "Model Custom Resource Definition"
 draft: false
 ---
@@ -16,7 +16,7 @@ The Model custom resource defines a machine learning model deployment in Plastik
 | `image` | string | Container image to use for the model |
 | `imagePullSecret` | string | Secret to use for pulling the image |
 | `modelStorage` | object | Storage configuration for the model |
-| `engine` | string | Model engine to use |
+| `engine` | string | Model engine to use (currently only supports "llamacpp") |
 | `features` | []string | Model features |
 | `resourceProfile` | string | Reference to a predefined resource profile |
 | `entrypoint` | []string | Override the image entrypoint |

@@ -1,6 +1,6 @@
 ---
 weight: 20
-title: "Resource Profile"
+title: "plastikube.dev/v1/ResourceProfile"
 description: "Resource Profile Custom Resource Definition"
 draft: false
 ---
